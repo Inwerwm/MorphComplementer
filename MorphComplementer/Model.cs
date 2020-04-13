@@ -1,5 +1,9 @@
-﻿using System;
+﻿using MikuMikuMethods.Vmd;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 using System.Windows;
 
 namespace MorphComplementer
@@ -82,6 +86,23 @@ namespace MorphComplementer
             }
 
             return points;
+        }
+
+        public string OutputVMD(List<Point> points, int frameLength, string morphName, double startRatio, double endRatio)
+        {
+            string FileName = $"Complemented_{morphName}.vmd";
+
+            VocaloidMotionData vmd = new VocaloidMotionData();
+            vmd.ModelName = "Complemented Morphs";
+            vmd.MorphFrames.AddRange(points.Select(p => new VmdMorphFrameData(morphName, (uint)Math.Round(p.X * frameLength), (float)(p.Y*(endRatio-startRatio)+startRatio))));
+
+            using (BinaryWriter writer = new BinaryWriter(new FileStream(FileName, FileMode.OpenOrCreate)))
+            {
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                vmd.Write(writer);
+            }
+
+            return FileName;
         }
     }
 }

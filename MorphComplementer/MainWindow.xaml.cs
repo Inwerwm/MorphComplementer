@@ -128,5 +128,10 @@ namespace MorphComplementer
             RefleshCurve();
             Grid.Data = VM.GetGrid();
         }
+
+        private void OutputButton_Click(object sender, RoutedEventArgs e)
+        {
+            LogLabel.Content = VM.Write().Replace("_","__");
+        }
     }
 }

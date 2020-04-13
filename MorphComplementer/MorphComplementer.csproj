@@ -8,6 +8,13 @@
 
   <ItemGroup>
     <PackageReference Include="ReactiveProperty" Version="6.2.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="MikuMikuMethods">
+      <HintPath>..\..\MikuMikuMethods\MikuMikuMethods\bin\Release\MikuMikuMethods.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

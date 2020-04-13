@@ -51,6 +51,7 @@ namespace MorphComplementer
             IsShowTCurve = new ReactiveProperty<bool>().AddTo(Disposable);
             IsRound = new ReactiveProperty<bool>().AddTo(Disposable);
 
+            MorphName.Value = "";
             FrameLength.Value = 2;
             StartRatio.Value = 0;
             EndRatio.Value = 1;
@@ -95,10 +96,11 @@ namespace MorphComplementer
             RefleshThinningThreshold();
             var points = new List<Point>();
             points.Add(Scale(M.Bezier.StartPoint));
-            for (decimal i = 1; i <= FrameLength.Value; i++)
+            for (decimal i = 1; i < FrameLength.Value; i++)
             {
                 points.Add(Scale(M.Bezier.GetPointByX((double)(i / FrameLength.Value))));
             }
+            points.Add(Scale(M.Bezier.EndPoint));
             List<Point> thinedPoints = new List<Point>();
             thinedPoints.AddRange(M.ThinningCurve(points));
             FrameNum.Value = thinedPoints.Count;
@@ -126,6 +128,33 @@ namespace MorphComplementer
             figures.Add(new PathFigure(new Point(0, 0), new PathSegmentCollection(points.Select((p, i) => new LineSegment(p, i % 2 == 1))), false));
 
             return new PathGeometry(figures);
+        }
+
+        public string Write()
+        {
+            if (MorphName.Value == "")
+            {
+                return $"ファイル出力に失敗しました{Environment.NewLine}モーフ名を入力してください。";
+            }
+
+            RefleshThinningThreshold();
+            var points = new List<Point>();
+            points.Add(M.Bezier.StartPoint);
+            for (decimal i = 1; i < FrameLength.Value; i++)
+            {
+                points.Add(M.Bezier.GetPointByX((double)(i / FrameLength.Value)));
+            }
+            points.Add(M.Bezier.EndPoint);
+            points = M.ThinningCurve(points);
+
+            if (IsRound.Value)
+            {
+                var r = points.Select(p => new Point(2 - p.X, p.Y)).SkipLast(1).ToList();
+                points.AddRange(r);
+            }
+            var outname = M.OutputVMD(points, FrameLength.Value, MorphName.Value, StartRatio.Value, EndRatio.Value);
+
+            return $"{DateTime.Now}{Environment.NewLine}{outname}を出力しました。";
         }
 
         public void Dispose()

@@ -134,7 +134,7 @@ namespace MorphComplementer
         {
             if (MorphName.Value == "")
             {
-                return $"ファイル出力に失敗しました{Environment.NewLine}モーフ名を入力してください。";
+                return $"{DateTime.Now}{Environment.NewLine}ファイル出力に失敗しました。{Environment.NewLine}モーフ名を入力してください。";
             }
 
             RefleshThinningThreshold();

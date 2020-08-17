@@ -21,23 +21,42 @@ namespace MorphComplementer
             SecondCtrlPoint = secondCtrlPoint;
         }
 
-        public Point GetPointByT(double t)
+        public Point ComputePointByT(double t)
         {
             return
-                StartPoint.Mul(-1).Plus(FirstCtrlPoint.Mul(3)).Minus(SecondCtrlPoint.Mul(3)).Plus(EndPoint).Mul(t * t * t).Plus(
-                StartPoint.Minus(FirstCtrlPoint.Mul(2)).Plus(SecondCtrlPoint).Mul(3 * t * t)).Plus(
-                StartPoint.Mul(-1).Plus(FirstCtrlPoint).Mul(3 * t)).Plus(
-                StartPoint)
+                StartPoint.Mul(-1)
+                .Plus(
+                    FirstCtrlPoint.Mul(3)
+                )
+                .Minus(
+                    SecondCtrlPoint.Mul(3)
+                )
+                .Plus(EndPoint)
+                .Mul(t * t * t)
+                .Plus(
+                    StartPoint.Minus(
+                        FirstCtrlPoint.Mul(2)
+                    )
+                .Plus(SecondCtrlPoint)
+                .Mul(3 * t * t)
+                )
+                .Plus(
+                    StartPoint
+                    .Mul(-1)
+                    .Plus(FirstCtrlPoint)
+                    .Mul(3 * t)
+                )
+                .Plus(StartPoint)
             ;
         }
 
-        public Point GetPointByX(double x)
+        public Point ComputePointByX(double x)
         {
             var t = x;
             Point p = new Point();
             for (int i = 0; i < 20; i++)
             {
-                p = GetPointByT(t);
+                p = ComputePointByT(t);
                 var ft = p.X - x;
                 if (Math.Abs(ft) <= COORDINATE_ACCURACY)
                     break;

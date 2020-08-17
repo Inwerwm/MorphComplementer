@@ -18,12 +18,12 @@ namespace MorphComplementer
         /// </summary>
         /// <param name="resolution">媒介変数T基準解像度</param>
         /// <returns>ベジェ曲線点群</returns>
-        public List<Point> GetCurveByT(int resolution)
+        public List<Point> ComputeCurveByT(int resolution)
         {
             var points = new List<Point>();
 
             for (int i = 0; i <= resolution; i++)
-                points.Add(Bezier.GetPointByT(i / resolution));
+                points.Add(Bezier.ComputePointByT(i / resolution));
 
             return points;
         }
@@ -33,12 +33,12 @@ namespace MorphComplementer
         /// </summary>
         /// <param name="resolution">X座標基準解像度</param>
         /// <returns>ベジェ曲線点群</returns>
-        public List<Point> GetCurveByX(int resolution)
+        public List<Point> ComputeCurveByX(int resolution)
         {
             var points = new List<Point>();
 
             for (int i = 0; i <= resolution; i++)
-                points.Add(Bezier.GetPointByX(i / resolution));
+                points.Add(Bezier.ComputePointByX(i / resolution));
 
             return points;
         }
@@ -51,7 +51,7 @@ namespace MorphComplementer
         public List<Point> ThinningCurve(List<Point> points)
         {
             //2点間の傾き
-            double GetGradient(Point A, Point B)
+            double ComputeGradient(Point A, Point B)
             {
                 var p = B - A;
                 return p.Y / p.X;
@@ -62,26 +62,21 @@ namespace MorphComplementer
             while (focus < points.Count - 2)
             {
                 //起点と直後の点の線分の傾きを間引き基準傾きとする
-                var gradient = GetGradient(points[focus], points[focus + 1]);
-                var removeIndices = new List<int>();
-                //跨点の番号
+                var gradient = ComputeGradient(points[focus], points[focus + 1]);
+                var removePoints = new List<Point>();
+                //中間点の番号
                 int i = focus + 2;
-                //起点と跨点の線分の傾きと間引き基準傾きの差が閾値以下である場合、間に存在する点を除去する
-                while (Math.Abs(gradient - GetGradient(points[focus], points[i])) < ThinningThreshold)
+                //起点と中間点の線分の傾きと間引き基準傾きの差が閾値以下である場合、間に存在する点を除去する
+                while (Math.Abs(gradient - ComputeGradient(points[focus], points[i])) < ThinningThreshold)
                 {
-                    removeIndices.Add(i - 1);
+                    removePoints.Add(points[i - 1]);
                     i++;
                     if (i >= points.Count)
                         break;
                 }
 
-                removeIndices.Reverse();
-                foreach (var r in removeIndices)
-                {
-                    points.RemoveAt(r);
-                }
+                points.RemoveAll(p =>removePoints.Contains(p));
 
-                //起点を進める
                 focus++;
             }
 

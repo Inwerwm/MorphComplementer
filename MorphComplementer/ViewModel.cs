@@ -31,7 +31,7 @@ namespace MorphComplementer
         public double CanvasHeight { get; set; }
         public double CanvasWidth { get; set; }
 
-        Model M = new Model();
+        Model model = new Model();
 
         Point Scale(Point target)
         {
@@ -64,54 +64,54 @@ namespace MorphComplementer
 
         public void SetFirstCtrlPoint(Thumb h)
         {
-            M.Bezier.FirstCtrlPoint = new Point((Canvas.GetLeft(h) + 5) / CanvasWidth, (Canvas.GetTop(h) + 5) / CanvasHeight);
+            model.Bezier.FirstCtrlPoint = new Point((Canvas.GetLeft(h) + 5) / CanvasWidth, (Canvas.GetTop(h) + 5) / CanvasHeight);
         }
 
         public void SetSecondCtrlPoint(Thumb h)
         {
-            M.Bezier.SecondCtrlPoint = new Point((Canvas.GetLeft(h) + 5) / CanvasWidth, (Canvas.GetTop(h) + 5) / CanvasHeight);
+            model.Bezier.SecondCtrlPoint = new Point((Canvas.GetLeft(h) + 5) / CanvasWidth, (Canvas.GetTop(h) + 5) / CanvasHeight);
         }
 
         private void RefleshThinningThreshold()
         {
-            M.ThinningThreshold = ThinningThreshold.Value;
+            model.ThinningThreshold = ThinningThreshold.Value;
         }
 
-        public PathGeometry GetTheoricalBezierCurve()
+        public PathGeometry MakeTheoricalBezierCurve()
         {
             if (!IsShowTCurve.Value)
                 return null;
 
             var segments = new PathSegmentCollection();
-            segments.Add(new BezierSegment(Scale(M.Bezier.FirstCtrlPoint), Scale(M.Bezier.SecondCtrlPoint), Scale(M.Bezier.EndPoint), true));
+            segments.Add(new BezierSegment(Scale(model.Bezier.FirstCtrlPoint), Scale(model.Bezier.SecondCtrlPoint), Scale(model.Bezier.EndPoint), true));
 
             var figures = new PathFigureCollection();
-            figures.Add(new PathFigure(Scale(M.Bezier.StartPoint), segments, false));
+            figures.Add(new PathFigure(Scale(model.Bezier.StartPoint), segments, false));
 
             return new PathGeometry(figures);
         }
 
-        public PathGeometry GetComplementBezierCurve()
+        public PathGeometry MakeComplementBezierCurve()
         {
             RefleshThinningThreshold();
             var points = new List<Point>();
-            points.Add(Scale(M.Bezier.StartPoint));
+            points.Add(Scale(model.Bezier.StartPoint));
             for (decimal i = 1; i < FrameLength.Value; i++)
             {
-                points.Add(Scale(M.Bezier.GetPointByX((double)(i / FrameLength.Value))));
+                points.Add(Scale(model.Bezier.ComputePointByX((double)(i / FrameLength.Value))));
             }
-            points.Add(Scale(M.Bezier.EndPoint));
+            points.Add(Scale(model.Bezier.EndPoint));
             List<Point> thinedPoints = new List<Point>();
-            thinedPoints.AddRange(M.ThinningCurve(points));
+            thinedPoints.AddRange(model.ThinningCurve(points));
             FrameNum.Value = thinedPoints.Count;
 
             var figures = new PathFigureCollection();
-            figures.Add(new PathFigure(Scale(M.Bezier.StartPoint), new PathSegmentCollection(thinedPoints.Skip(1).Select(p => new LineSegment(p, true))), false));
+            figures.Add(new PathFigure(Scale(model.Bezier.StartPoint), new PathSegmentCollection(thinedPoints.Skip(1).Select(p => new LineSegment(p, true))), false));
 
             return new PathGeometry(figures);
         }
 
-        public PathGeometry GetGrid()
+        public PathGeometry MakeGrid()
         {
             if (!IsShowGrid.Value)
                 return null;
@@ -139,20 +139,20 @@ namespace MorphComplementer
 
             RefleshThinningThreshold();
             var points = new List<Point>();
-            points.Add(M.Bezier.StartPoint);
+            points.Add(model.Bezier.StartPoint);
             for (decimal i = 1; i < FrameLength.Value; i++)
             {
-                points.Add(M.Bezier.GetPointByX((double)(i / FrameLength.Value)));
+                points.Add(model.Bezier.ComputePointByX((double)(i / FrameLength.Value)));
             }
-            points.Add(M.Bezier.EndPoint);
-            points = M.ThinningCurve(points);
+            points.Add(model.Bezier.EndPoint);
+            points = model.ThinningCurve(points);
 
             if (IsRound.Value)
             {
                 var r = points.Select(p => new Point(2 - p.X, p.Y)).SkipLast(1).ToList();
                 points.AddRange(r);
             }
-            var outname = M.OutputVMD(points, FrameLength.Value, MorphName.Value, StartRatio.Value, EndRatio.Value);
+            var outname = model.OutputVMD(points, FrameLength.Value, MorphName.Value, StartRatio.Value, EndRatio.Value);
 
             return $"{DateTime.Now}{Environment.NewLine}{outname}を出力しました。";
         }

@@ -27,13 +27,13 @@ namespace MorphComplementer
             VM.CanvasWidth = CurveCanvas.Width;
             RefleshCtrlPointDepends(Ctrl.First, FirstCtrlPoint);
             RefleshCtrlPointDepends(Ctrl.Second, SecondCtrlPoint);
-            Grid.Data = VM.GetGrid();
+            Grid.Data = VM.MakeGrid();
         }
 
         private void RefleshCurve()
         {
-            CCurve.Data = VM.GetComplementBezierCurve();
-            TCurve.Data = VM.GetTheoricalBezierCurve();
+            CCurve.Data = VM.MakeComplementBezierCurve();
+            TCurve.Data = VM.MakeTheoricalBezierCurve();
         }
 
         private enum Ctrl
@@ -94,7 +94,7 @@ namespace MorphComplementer
 
         private void CheckBox_Changed(object sender, RoutedEventArgs e)
         {
-            Grid.Data = VM.GetGrid();
+            Grid.Data = VM.MakeGrid();
             RefleshCurve();
         }
 
@@ -126,7 +126,7 @@ namespace MorphComplementer
             if (VM.FrameLength.Value < 0)
                 VM.FrameLength.Value = 2;
             RefleshCurve();
-            Grid.Data = VM.GetGrid();
+            Grid.Data = VM.MakeGrid();
         }
 
         private void OutputButton_Click(object sender, RoutedEventArgs e)

@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MorphComplementer"
         mc:Ignorable="d"
         Title="MorphComplementer" 
         Height="450" Width="730"
@@ -32,6 +31,7 @@
                 <RowDefinition Height="25"/>
                 <RowDefinition Height="70"/>
                 <RowDefinition Height="25"/>
+                <RowDefinition Height="25"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -57,9 +57,10 @@
                     <CheckBox Content="往復出力" IsChecked="{Binding IsRound.Value}"/>
                 </StackPanel>
             </GroupBox>
-            <Button x:Name="ResetButton" Content="リセット" Margin="1,1,1,1" Grid.Column="0" Grid.Row="7" Click="ResetButton_Click"/>
-            <Button x:Name="OutputButton" Content="出力" Margin="1,1,1,1" Grid.Column="1" Grid.Row="7" Click="OutputButton_Click"/>
-            <Label x:Name="LogLabel" Margin="1,1,1,1" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"/>
+            <Button x:Name="ImportButton" Content="VMDから読込" Margin="1,1,1,1" Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2" Click="ImportButton_Click"/>
+            <Button x:Name="ResetButton" Content="リセット" Margin="1,1,1,1" Grid.Column="0" Grid.Row="8" Click="ResetButton_Click"/>
+            <Button x:Name="OutputButton" Content="出力" Margin="1,1,1,1" Grid.Column="1" Grid.Row="8" Click="OutputButton_Click"/>
+            <Label x:Name="LogLabel" Margin="1,1,1,1" Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2"/>
         </Grid>
         <Canvas x:Name="CurveCanvas" Width="400" Height="400" HorizontalAlignment="Left" VerticalAlignment="Top">
             <Canvas.LayoutTransform>

@@ -133,5 +133,10 @@ namespace MorphComplementer
         {
             LogLabel.Content = VM.Write().Replace("_","__");
         }
+
+        private void ImportButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

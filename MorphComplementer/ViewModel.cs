@@ -33,7 +33,7 @@ namespace MorphComplementer
 
         Model model = new Model();
 
-        Point Scale(Point target)
+        Point ScaleToCanvasSize(Point target)
         {
             return new Point(target.X * CanvasWidth, target.Y * CanvasHeight);
         }
@@ -83,10 +83,10 @@ namespace MorphComplementer
                 return null;
 
             var segments = new PathSegmentCollection();
-            segments.Add(new BezierSegment(Scale(model.Bezier.FirstCtrlPoint), Scale(model.Bezier.SecondCtrlPoint), Scale(model.Bezier.EndPoint), true));
+            segments.Add(new BezierSegment(ScaleToCanvasSize(model.Bezier.FirstCtrlPoint), ScaleToCanvasSize(model.Bezier.SecondCtrlPoint), ScaleToCanvasSize(model.Bezier.EndPoint), true));
 
             var figures = new PathFigureCollection();
-            figures.Add(new PathFigure(Scale(model.Bezier.StartPoint), segments, false));
+            figures.Add(new PathFigure(ScaleToCanvasSize(model.Bezier.StartPoint), segments, false));
 
             return new PathGeometry(figures);
         }
@@ -95,18 +95,18 @@ namespace MorphComplementer
         {
             RefleshThinningThreshold();
             var points = new List<Point>();
-            points.Add(Scale(model.Bezier.StartPoint));
+            points.Add(ScaleToCanvasSize(model.Bezier.StartPoint));
             for (decimal i = 1; i < FrameLength.Value; i++)
             {
-                points.Add(Scale(model.Bezier.ComputePointByX((double)(i / FrameLength.Value))));
+                points.Add(ScaleToCanvasSize(model.Bezier.ComputePointByX((double)(i / FrameLength.Value))));
             }
-            points.Add(Scale(model.Bezier.EndPoint));
+            points.Add(ScaleToCanvasSize(model.Bezier.EndPoint));
             List<Point> thinedPoints = new List<Point>();
             thinedPoints.AddRange(model.ThinningCurve(points));
             FrameNum.Value = thinedPoints.Count;
 
             var figures = new PathFigureCollection();
-            figures.Add(new PathFigure(Scale(model.Bezier.StartPoint), new PathSegmentCollection(thinedPoints.Skip(1).Select(p => new LineSegment(p, true))), false));
+            figures.Add(new PathFigure(ScaleToCanvasSize(model.Bezier.StartPoint), new PathSegmentCollection(thinedPoints.Skip(1).Select(p => new LineSegment(p, true))), false));
 
             return new PathGeometry(figures);
         }

@@ -181,10 +181,10 @@ namespace MorphComplementer
                     bool isCamera = vmd.ModelName == VocaloidMotionData.CAMERA_DATA_NAME;
 
                     InterpolateTypes.Clear();
-                    InterpolateTypes.Add(model.IPMap[Model.InterpolationItem.Rotation]);
                     InterpolateTypes.Add(model.IPMap[Model.InterpolationItem.XPosition]);
                     InterpolateTypes.Add(model.IPMap[Model.InterpolationItem.YPosition]);
                     InterpolateTypes.Add(model.IPMap[Model.InterpolationItem.ZPosition]);
+                    InterpolateTypes.Add(model.IPMap[Model.InterpolationItem.Rotation]);
                     if (isCamera)
                     {
                         InterpolateTypes.Add(model.IPMap[Model.InterpolationItem.Distance]);

@@ -145,7 +145,7 @@ namespace MorphComplementer
         {
             try
             {
-                (Point First, Point Second) impotedPoints = VM.ImportFromVMD() ?? InitialPoints;
+                (Point First, Point Second) impotedPoints = VM.ImportFromVMD(this) ?? InitialPoints;
                 SetCtrlPoints(impotedPoints);
             }
             catch (Exception ex)

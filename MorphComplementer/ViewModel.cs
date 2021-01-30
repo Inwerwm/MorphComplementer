@@ -165,7 +165,7 @@ namespace MorphComplementer
             return $"{DateTime.Now}{Environment.NewLine}{outname}を出力しました。";
         }
 
-        public (Point First, Point Second)? ImportFromVMD()
+        public (Point First, Point Second)? ImportFromVMD(MainWindow ownerWindow)
         {
             (Point First, Point Second) Scale((Point First, Point Second) target) =>
                 (ScaleToCanvasSize(target.First), ScaleToCanvasSize(target.Second));
@@ -192,6 +192,7 @@ namespace MorphComplementer
                     }
 
                     VmdImport vmdImportWindow = new(this);
+                    vmdImportWindow.Owner = ownerWindow;
                     if (vmdImportWindow.ShowDialog().Value)
                         return Scale(model.ImportFromVMD(vmd, model.IPMap.First(p => p.Value == vmdImportWindow.SelectedItem).Key, isCamera));
                 }

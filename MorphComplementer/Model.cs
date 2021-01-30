@@ -112,17 +112,28 @@ namespace MorphComplementer
 
             return interpolation switch
             {
-                InterpolationItem.XPosition => PointsByBytes(isCamera ? firstCameraFrame?.InterpolatePointX : firstMotionFrame?.InterpolatePointX),
-                InterpolationItem.YPosition => PointsByBytes(isCamera ? firstCameraFrame?.InterpolatePointY : firstMotionFrame?.InterpolatePointY),
-                InterpolationItem.ZPosition => PointsByBytes(isCamera ? firstCameraFrame?.InterpolatePointZ : firstMotionFrame?.InterpolatePointZ),
-                InterpolationItem.Rotation => PointsByBytes(isCamera ? firstCameraFrame?.InterpolatePointR : firstMotionFrame?.InterpolatePointR),
-                InterpolationItem.Distance => PointsByBytes(firstCameraFrame?.InterpolatePointD),
-                InterpolationItem.ViewAngle => PointsByBytes(firstCameraFrame?.InterpolatePointA),
+                InterpolationItem.XPosition => isCamera ? IPC(firstCameraFrame?.InterpolatePointX) : IPM(firstMotionFrame?.InterpolatePointX),
+                InterpolationItem.YPosition => isCamera ? IPC(firstCameraFrame?.InterpolatePointY) : IPM(firstMotionFrame?.InterpolatePointY),
+                InterpolationItem.ZPosition => isCamera ? IPC(firstCameraFrame?.InterpolatePointZ) : IPM(firstMotionFrame?.InterpolatePointZ),
+                InterpolationItem.Rotation => isCamera ? IPC(firstCameraFrame?.InterpolatePointR) : IPM(firstMotionFrame?.InterpolatePointR),
+                InterpolationItem.Distance => IPC(firstCameraFrame?.InterpolatePointD),
+                InterpolationItem.ViewAngle => IPC(firstCameraFrame?.InterpolatePointA),
                 _ => throw new InvalidOperationException(),
             };
         }
 
-        private (Point First, Point Second) PointsByBytes(byte[] bytes) => (new(bytes[0] / 127.0, bytes[2] / 127.0), new(bytes[1] / 127.0, bytes[3] / 127.0));
+        /// <summary>
+        /// モーションの補間曲線の制御点の座標を取得する
+        /// </summary>
+        /// <param name="bytes">もととなるバイト列</param>
+        /// <returns>補間曲線の制御点</returns>
+        private (Point First, Point Second) IPM(byte[] bytes) => (new(bytes[0] / 127.0, bytes[1] / 127.0), new(bytes[2] / 127.0, bytes[3] / 127.0));
+        /// <summary>
+        /// カメラの補間曲線の制御点の座標を取得する
+        /// </summary>
+        /// <param name="bytes">もととなるバイト列</param>
+        /// <returns>補間曲線の制御点</returns>
+        private (Point First, Point Second) IPC(byte[] bytes) => (new(bytes[0] / 127.0, bytes[2] / 127.0), new(bytes[1] / 127.0, bytes[3] / 127.0));
 
         public enum InterpolationItem
         {

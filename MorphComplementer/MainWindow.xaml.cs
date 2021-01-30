@@ -16,6 +16,7 @@ namespace MorphComplementer
 
         ViewModel VM { get; } = new ViewModel();
 
+        (Point First, Point Second) InitialPoints = (new(100, 100), new(300, 300));
         readonly int FRAME_LENGTH_LIMIT = 999;
 
         public MainWindow()
@@ -100,10 +101,10 @@ namespace MorphComplementer
 
         private void SetCtrlPoints((Point First, Point Second) positons)
         {
-            Canvas.SetLeft(FirstCtrlPoint, positons.First.X);
-            Canvas.SetTop(FirstCtrlPoint, positons.First.Y);
-            Canvas.SetLeft(SecondCtrlPoint, positons.Second.X);
-            Canvas.SetTop(SecondCtrlPoint, positons.Second.Y);
+            Canvas.SetLeft(FirstCtrlPoint, positons.First.X - 5);
+            Canvas.SetTop(FirstCtrlPoint, positons.First.Y - 5);
+            Canvas.SetLeft(SecondCtrlPoint, positons.Second.X - 5);
+            Canvas.SetTop(SecondCtrlPoint, positons.Second.Y - 5);
 
             RefleshCtrlPointDepends(Ctrl.First, FirstCtrlPoint);
             RefleshCtrlPointDepends(Ctrl.Second, SecondCtrlPoint);
@@ -111,8 +112,7 @@ namespace MorphComplementer
 
         private void ResetButton_Click(object sender, RoutedEventArgs e)
         {
-            (Point First, Point Second) initialPoints = (new(95, 95), new(295, 295));
-            SetCtrlPoints(initialPoints);
+            SetCtrlPoints(InitialPoints);
         }
 
 
@@ -143,8 +143,15 @@ namespace MorphComplementer
 
         private void ImportButton_Click(object sender, RoutedEventArgs e)
         {
-            (Point First, Point Second) impotedPoints = VM.ImportFromVMD() ?? (new(95, 95), new(295, 295));
-            SetCtrlPoints(impotedPoints);
+            try
+            {
+                (Point First, Point Second) impotedPoints = VM.ImportFromVMD() ?? InitialPoints;
+                SetCtrlPoints(impotedPoints);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "エラー", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
     }
 }

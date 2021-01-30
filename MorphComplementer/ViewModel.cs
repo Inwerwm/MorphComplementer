@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -173,11 +174,13 @@ namespace MorphComplementer
             openFileDialog.Filter = "VMDファイル(*.vmd)|*.vmd";
             if(openFileDialog.ShowDialog().Value)
             {
-                using (BinaryReader reader = new(new FileStream(openFileDialog.FileName, FileMode.Open)))
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                using (BinaryReader reader = new(new FileStream(openFileDialog.FileName, FileMode.Open), Encoding.GetEncoding("Shift_JIS")))
                 {
                     VocaloidMotionData vmd = new(reader);
                     bool isCamera = vmd.ModelName == VocaloidMotionData.CAMERA_DATA_NAME;
 
+                    InterpolateTypes.Clear();
                     InterpolateTypes.Add(model.IPMap[Model.InterpolationItem.Rotation]);
                     InterpolateTypes.Add(model.IPMap[Model.InterpolationItem.XPosition]);
                     InterpolateTypes.Add(model.IPMap[Model.InterpolationItem.YPosition]);

@@ -102,8 +102,8 @@ namespace MorphComplementer
 
         public (Point First, Point Second) ImportFromVMD(VocaloidMotionData vmd, InterpolationItem interpolation, bool isCamera)
         {
-            VmdCameraFrameData? firstCameraFrame = vmd.CameraFrames.FirstOrDefault();
-            VmdMotionFrameData? firstMotionFrame = vmd.MotionFrames.FirstOrDefault();
+            VmdCameraFrameData? firstCameraFrame = vmd.CameraFrames.Count > 0 ? vmd.CameraFrames.First() : null;
+            VmdMotionFrameData? firstMotionFrame = vmd.MotionFrames.Count > 0 ? vmd.MotionFrames.First() : null;
 
             if (isCamera && firstCameraFrame is null)
                 throw new ArgumentNullException("VMDからフレームを発見出来ませんでした。");
@@ -122,7 +122,7 @@ namespace MorphComplementer
             };
         }
 
-        private (Point First, Point Second) PointsByBytes(byte[] bytes) => (new(bytes[0] / 127.0, bytes[1] / 127.0), new(bytes[2] / 127.0, bytes[3] / 127.0));
+        private (Point First, Point Second) PointsByBytes(byte[] bytes) => (new(bytes[0] / 127.0, bytes[2] / 127.0), new(bytes[1] / 127.0, bytes[3] / 127.0));
 
         public enum InterpolationItem
         {
@@ -155,11 +155,11 @@ namespace MorphComplementer
         public Dictionary<InterpolationItem, string> IPMap => new()
         {
             { InterpolationItem.XPosition, "X軸移動" },
-            { InterpolationItem.XPosition, "Y軸移動" },
-            { InterpolationItem.XPosition, "Z軸移動" },
-            { InterpolationItem.XPosition, "回転" },
-            { InterpolationItem.XPosition, "距離" },
-            { InterpolationItem.XPosition, "視野角" }
+            { InterpolationItem.YPosition, "Y軸移動" },
+            { InterpolationItem.ZPosition, "Z軸移動" },
+            { InterpolationItem.Rotation, "回転" },
+            { InterpolationItem.Distance, "距離" },
+            { InterpolationItem.ViewAngle, "視野角" }
         };
     }
 }

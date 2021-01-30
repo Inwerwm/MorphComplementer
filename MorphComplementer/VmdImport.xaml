@@ -5,8 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MorphComplementer"
         mc:Ignorable="d"
-        Title="VmdImport" Height="450" Width="800">
+        Title="VmdImport" Height="200" Width="150">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <ListBox x:Name="CurveList" Grid.Row="0" Grid.Column="0" Margin="4" />
+        <Button x:Name="OKButton" Content="確定" Grid.Row="1" Grid.Column="0" Margin="4"/>
     </Grid>
 </Window>

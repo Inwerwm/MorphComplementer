@@ -12,7 +12,7 @@ using System.Windows.Media;
 
 namespace MorphComplementer
 {
-    class ViewModel : INotifyPropertyChanged, IDisposable
+    public class ViewModel : INotifyPropertyChanged, IDisposable
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private CompositeDisposable Disposable { get; } = new CompositeDisposable();
@@ -27,6 +27,8 @@ namespace MorphComplementer
         public ReactiveProperty<bool> IsShowGrid { get; }
         public ReactiveProperty<bool> IsShowTCurve { get; }
         public ReactiveProperty<bool> IsRound { get; }
+
+        public ReactiveCollection<string> InterpolateTypes { get; }
 
         public double CanvasHeight { get; set; }
         public double CanvasWidth { get; set; }
@@ -50,6 +52,8 @@ namespace MorphComplementer
             IsShowGrid = new ReactiveProperty<bool>().AddTo(Disposable);
             IsShowTCurve = new ReactiveProperty<bool>().AddTo(Disposable);
             IsRound = new ReactiveProperty<bool>().AddTo(Disposable);
+
+            InterpolateTypes = new ReactiveCollection<string>().AddTo(Disposable);
 
             MorphName.Value = "";
             FrameLength.Value = 2;

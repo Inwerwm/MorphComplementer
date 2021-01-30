@@ -14,7 +14,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <ListBox x:Name="CurveList" Grid.Row="0" Grid.Column="0" Margin="4" />
+        <ListBox x:Name="CurveList" Grid.Row="0" Grid.Column="0" Margin="4" ItemsSource="{Binding InterpolateTypes.Value}"/>
         <Button x:Name="OKButton" Content="確定" Grid.Row="1" Grid.Column="0" Margin="4"/>
     </Grid>
 </Window>

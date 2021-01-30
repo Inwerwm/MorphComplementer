@@ -19,9 +19,14 @@ namespace MorphComplementer
     /// </summary>
     public partial class VmdImport : Window
     {
-        public VmdImport()
+        ViewModel VM { get; }
+
+        public VmdImport(ViewModel vm)
         {
             InitializeComponent();
+
+            VM = vm;
+            DataContext = VM;
         }
     }
 }

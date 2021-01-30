@@ -99,5 +99,67 @@ namespace MorphComplementer
 
             return FileName;
         }
+
+        public (Point First, Point Second) ImportFromVMD(VocaloidMotionData vmd, InterpolationItem interpolation, bool isCamera)
+        {
+            VmdCameraFrameData? firstCameraFrame = vmd.CameraFrames.FirstOrDefault();
+            VmdMotionFrameData? firstMotionFrame = vmd.MotionFrames.FirstOrDefault();
+
+            if (isCamera && firstCameraFrame is null)
+                throw new ArgumentNullException("VMDからフレームを発見出来ませんでした。");
+            if(!isCamera && firstMotionFrame is null)
+                throw new ArgumentNullException("VMDからフレームを発見出来ませんでした。");
+
+            return interpolation switch
+            {
+                InterpolationItem.XPosition => PointsByBytes(isCamera ? firstCameraFrame?.InterpolatePointX : firstMotionFrame?.InterpolatePointX),
+                InterpolationItem.YPosition => PointsByBytes(isCamera ? firstCameraFrame?.InterpolatePointY : firstMotionFrame?.InterpolatePointY),
+                InterpolationItem.ZPosition => PointsByBytes(isCamera ? firstCameraFrame?.InterpolatePointZ : firstMotionFrame?.InterpolatePointZ),
+                InterpolationItem.Rotation => PointsByBytes(isCamera ? firstCameraFrame?.InterpolatePointR : firstMotionFrame?.InterpolatePointR),
+                InterpolationItem.Distance => PointsByBytes(firstCameraFrame?.InterpolatePointD),
+                InterpolationItem.ViewAngle => PointsByBytes(firstCameraFrame?.InterpolatePointA),
+                _ => throw new InvalidOperationException(),
+            };
+        }
+
+        private (Point First, Point Second) PointsByBytes(byte[] bytes) => (new(bytes[0] / 127.0, bytes[1] / 127.0), new(bytes[2] / 127.0, bytes[3] / 127.0));
+
+        public enum InterpolationItem
+        {
+            /// <summary>
+            /// x軸移動
+            /// </summary>
+            XPosition,
+            /// <summary>
+            /// Y軸移動
+            /// </summary>
+            YPosition,
+            /// <summary>
+            /// Z軸移動
+            /// </summary>
+            ZPosition,
+            /// <summary>
+            /// 回転
+            /// </summary>
+            Rotation,
+            /// <summary>
+            /// 距離
+            /// </summary>
+            Distance,
+            /// <summary>
+            /// 視野角
+            /// </summary>
+            ViewAngle,
+        }
+
+        public Dictionary<InterpolationItem, string> IPMap => new()
+        {
+            { InterpolationItem.XPosition, "X軸移動" },
+            { InterpolationItem.XPosition, "Y軸移動" },
+            { InterpolationItem.XPosition, "Z軸移動" },
+            { InterpolationItem.XPosition, "回転" },
+            { InterpolationItem.XPosition, "距離" },
+            { InterpolationItem.XPosition, "視野角" }
+        };
     }
 }

@@ -98,16 +98,23 @@ namespace MorphComplementer
             RefleshCurve();
         }
 
-        private void ResetButton_Click(object sender, RoutedEventArgs e)
+        private void SetCtrlPoints((Point First, Point Second) positons)
         {
-            Canvas.SetLeft(FirstCtrlPoint, 95);
-            Canvas.SetTop(FirstCtrlPoint, 95);
-            Canvas.SetLeft(SecondCtrlPoint, 295);
-            Canvas.SetTop(SecondCtrlPoint, 295);
+            Canvas.SetLeft(FirstCtrlPoint, positons.First.X);
+            Canvas.SetTop(FirstCtrlPoint, positons.First.Y);
+            Canvas.SetLeft(SecondCtrlPoint, positons.Second.X);
+            Canvas.SetTop(SecondCtrlPoint, positons.Second.Y);
 
             RefleshCtrlPointDepends(Ctrl.First, FirstCtrlPoint);
             RefleshCtrlPointDepends(Ctrl.Second, SecondCtrlPoint);
         }
+
+        private void ResetButton_Click(object sender, RoutedEventArgs e)
+        {
+            (Point First, Point Second) initialPoints = (new(95, 95), new(295, 295));
+            SetCtrlPoints(initialPoints);
+        }
+
 
         private void IntegerOnly_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
@@ -136,7 +143,8 @@ namespace MorphComplementer
 
         private void ImportButton_Click(object sender, RoutedEventArgs e)
         {
-
+            (Point First, Point Second) impotedPoints = VM.ImportFromVMD() ?? (new(95, 95), new(295, 295));
+            SetCtrlPoints(impotedPoints);
         }
     }
 }

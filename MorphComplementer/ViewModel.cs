@@ -1,8 +1,11 @@
-﻿using Reactive.Bindings;
+﻿using Microsoft.Win32;
+using MikuMikuMethods.Vmd;
+using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Windows;
@@ -159,6 +162,39 @@ namespace MorphComplementer
             var outname = model.OutputVMD(points, FrameLength.Value, MorphName.Value, StartRatio.Value, EndRatio.Value);
 
             return $"{DateTime.Now}{Environment.NewLine}{outname}を出力しました。";
+        }
+
+        public (Point First, Point Second)? ImportFromVMD()
+        {
+            (Point First, Point Second) Scale((Point First, Point Second) target) =>
+                (ScaleToCanvasSize(target.First), ScaleToCanvasSize(target.Second));
+
+            OpenFileDialog openFileDialog = new();
+            openFileDialog.Filter = "VMDファイル(*.vmd)|*.vmd";
+            if(openFileDialog.ShowDialog().Value)
+            {
+                using (BinaryReader reader = new(new FileStream(openFileDialog.FileName, FileMode.Open)))
+                {
+                    VocaloidMotionData vmd = new(reader);
+                    bool isCamera = vmd.ModelName == VocaloidMotionData.CAMERA_DATA_NAME;
+
+                    InterpolateTypes.Add(model.IPMap[Model.InterpolationItem.Rotation]);
+                    InterpolateTypes.Add(model.IPMap[Model.InterpolationItem.XPosition]);
+                    InterpolateTypes.Add(model.IPMap[Model.InterpolationItem.YPosition]);
+                    InterpolateTypes.Add(model.IPMap[Model.InterpolationItem.ZPosition]);
+                    if (isCamera)
+                    {
+                        InterpolateTypes.Add(model.IPMap[Model.InterpolationItem.Distance]);
+                        InterpolateTypes.Add(model.IPMap[Model.InterpolationItem.ViewAngle]);
+                    }
+
+                    VmdImport vmdImportWindow = new(this);
+                    if (vmdImportWindow.ShowDialog().Value)
+                        return Scale(model.ImportFromVMD(vmd, model.IPMap.First(p => p.Value == vmdImportWindow.SelectedItem).Key, isCamera));
+                }
+            }
+
+            return null;
         }
 
         public void Dispose()

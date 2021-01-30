@@ -5,16 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MorphComplementer"
         mc:Ignorable="d"
-        Title="VmdImport" Height="200" Width="150">
+        Title="要素を選択" Height="300" Width="150">
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <ListBox x:Name="CurveList" Grid.Row="0" Grid.Column="0" Margin="4" ItemsSource="{Binding InterpolateTypes.Value}"/>
-        <Button x:Name="OKButton" Content="確定" Grid.Row="1" Grid.Column="0" Margin="4"/>
+        <ListBox x:Name="CurveList" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="4" ItemsSource="{Binding InterpolateTypes}"/>
+        <Button x:Name="OKButton" Content="確定" Grid.Row="1" Grid.Column="0" Margin="4" Click="OKButton_Click"/>
+        <Button x:Name="CancelButton" Content="キャンセル" Grid.Row="1" Grid.Column="1" Margin="4" Click="CancelButton_Click"/>
     </Grid>
 </Window>

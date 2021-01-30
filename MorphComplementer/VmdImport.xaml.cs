@@ -20,6 +20,7 @@ namespace MorphComplementer
     public partial class VmdImport : Window
     {
         ViewModel VM { get; }
+        public string? SelectedItem { get; private set; }
 
         public VmdImport(ViewModel vm)
         {
@@ -27,6 +28,21 @@ namespace MorphComplementer
 
             VM = vm;
             DataContext = VM;
+        }
+
+        private void OKButton_Click(object sender, RoutedEventArgs e)
+        {
+            SelectedItem = CurveList.SelectedItem as string;
+            DialogResult = SelectedItem is not null;
+
+            Close();
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+
+            Close();
         }
     }
 }

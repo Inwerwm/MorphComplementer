@@ -46,8 +46,8 @@
             <Label Content="{Binding FrameNum.Value}" Grid.Column="1" Grid.Row="2"/>
             <Label Content="始端値" Grid.Column="0" Grid.Row="3"/>
             <Label Content="終端値" Grid.Column="1" Grid.Row="3"/>
-            <TextBox Text="{Binding StartRatio.Value, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F3}}" Margin="1,1,1,1" Grid.Column="0" Grid.Row="4" TextWrapping="Wrap" PreviewTextInput="FloatOnly_PreviewTextInput" InputMethod.IsInputMethodEnabled="False"/>
-            <TextBox Text="{Binding EndRatio.Value, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F3}}" Margin="1,1,1,1" Grid.Column="1" Grid.Row="4" TextWrapping="Wrap" PreviewTextInput="FloatOnly_PreviewTextInput" InputMethod.IsInputMethodEnabled="False"/>
+            <TextBox Text="{Binding StartRatio.Value, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F4}}" Margin="1,1,1,1" Grid.Column="0" Grid.Row="4" TextWrapping="Wrap" PreviewTextInput="FloatOnly_PreviewTextInput" InputMethod.IsInputMethodEnabled="False"/>
+            <TextBox Text="{Binding EndRatio.Value, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F4}}" Margin="1,1,1,1" Grid.Column="1" Grid.Row="4" TextWrapping="Wrap" PreviewTextInput="FloatOnly_PreviewTextInput" InputMethod.IsInputMethodEnabled="False"/>
             <Label Content="間引き閾値" Grid.Column="0" Grid.Row="5"/>
             <TextBox Text="{Binding ThinningThreshold.Value, StringFormat={}{0:F5}, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" Margin="1,1,1,1" Grid.Column="1" Grid.Row="5" TextWrapping="Wrap" PreviewTextInput="FloatOnly_PreviewTextInput" InputMethod.IsInputMethodEnabled="False" SourceUpdated="CurveSettingTextBox_SourceUpdated"/>
             <GroupBox Header="設定" Margin="1,0,1,1" Grid.ColumnSpan="2" Grid.Row="6">

@@ -85,7 +85,7 @@ namespace MorphComplementer
 
         public string OutputVMD(List<Point> points, int frameLength, string morphName, double startRatio, double endRatio)
         {
-            string FileName = $"Complemented_{morphName}.vmd";
+            string FileName = $"Complemented_{new string(morphName.Where(c => !Path.GetInvalidFileNameChars().Contains(c)).ToArray())}.vmd";
 
             VocaloidMotionData vmd = new VocaloidMotionData();
             vmd.ModelName = "Complemented Morphs";

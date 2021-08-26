@@ -60,7 +60,7 @@
             <Button x:Name="ImportButton" Content="VMDから読込" Margin="1,1,1,1" Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2" Click="ImportButton_Click"/>
             <Button x:Name="ResetButton" Content="リセット" Margin="1,1,1,1" Grid.Column="0" Grid.Row="8" Click="ResetButton_Click"/>
             <Button x:Name="OutputButton" Content="出力" Margin="1,1,1,1" Grid.Column="1" Grid.Row="8" Click="OutputButton_Click"/>
-            <Label x:Name="LogLabel" Margin="1,1,1,1" Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2"/>
+            <TextBlock x:Name="LogBlock" Margin="1,1,1,1" Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="Wrap"/>
         </Grid>
         <Canvas x:Name="CurveCanvas" Width="400" Height="400" HorizontalAlignment="Left" VerticalAlignment="Top">
             <Canvas.LayoutTransform>

@@ -138,7 +138,15 @@ namespace MorphComplementer
 
         private void OutputButton_Click(object sender, RoutedEventArgs e)
         {
-            LogLabel.Content = VM.Write().Replace("_","__");
+            try
+            {
+                LogBlock.Text = VM.Write().Replace("_", "__");
+            }
+            catch (System.IO.IOException ex)
+            {
+                MessageBox.Show($"VMDファイルの出力に失敗しました。", "出力エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+                LogBlock.Text = $"VMDファイルの出力に失敗しました。{Environment.NewLine}{ex.GetType()}:{Environment.NewLine}{ex.Message}";
+            }
         }
 
         private void ImportButton_Click(object sender, RoutedEventArgs e)
